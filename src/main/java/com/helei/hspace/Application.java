@@ -11,14 +11,10 @@ import com.helei.hspace.server.RequestProcessor;
 
 public class Application {
 
-    public String gogo(String... s) {
-        return Arrays.toString(s);
-    }
-
     public static void main(String[] args) throws Exception {
         JettyServer s = new JettyServer(8080, 5);
         RequestDispatcher dispatcher = new RequestDispatcher();
-        dispatcher.registerProcessor("/hello/(.*)", "GET", "com.helei.hspace.Application", "gogo");
+        dispatcher.registerProcessor("/hello/([0-9]+)(?:/.*)?", "GET", "com.helei.hspace.article.ArticleService", "hello");
         s.addProcessor(dispatcher);
         s.run();
     }
