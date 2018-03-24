@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 /**
  * multi pattern matcher
+ * syntax
+ * 1. wildcard *
+ * 2. variable catpure, :name 
+ * 3. every other character are literal
  */
 public class PatternMatcher
 {

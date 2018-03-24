@@ -1,32 +1,29 @@
 package com.helei.hspace.ioc;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.lang.reflect.*;
 import com.helei.hspace.util.*;
+
+import org.eclipse.jetty.util.ConcurrentArrayQueue;
 
 public class ThreadResource<T> implements Resource<T>
 {
     private Container parentContainer;
 
     /**
-     * every thread has an independent dependency cache
+     * threads share dependency configuration
+     * so it is saved in concurrent map
      */
-    private ThreadLocal<HashMap<String, String>> dependencies = 
-        new ThreadLocal<HashMap<String, String>>() {
-            @Override
-            protected HashMap<String, String> initialValue() {
-                return new HashMap<>();
-            }
-        };
-    private ThreadLocal<HashMap<String, Object>> valueDependencies = 
-        new ThreadLocal<HashMap<String, Object>>() {
-            @Override
-            protected HashMap<String, Object> initialValue() {
-                return new HashMap<>(); 
-            }
-        };
+    private ConcurrentHashMap<String, String> dependencies =
+        new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Object> valueDependencies =
+        new ConcurrentHashMap<>();
 
     private String className;
+    /**
+     * thread local object cache
+     */
     private ThreadLocal<Object> cached = new ThreadLocal<>();
 
     public ThreadResource(String className, Container parentContainer) {
@@ -35,12 +32,12 @@ public class ThreadResource<T> implements Resource<T>
     } 
 
     public Resource<T> depends(String property, String id){
-        dependencies.get().put(property, id);
+        dependencies.put(property, id);
         return this;
     }
 
     public Resource<T> dependsValue(String property, Object value) {
-        valueDependencies.get().put(property, value);
+        valueDependencies.put(property, value);
         return this;
     }
 
@@ -70,12 +67,12 @@ public class ThreadResource<T> implements Resource<T>
         Object obj = cls.newInstance();
         // resolve all dependencies     
         // and invoke setter method on the object
-        for (HashMap.Entry<String, String> entry : dependencies.get().entrySet()) {
+        for (HashMap.Entry<String, String> entry : dependencies.entrySet()) {
             Resource<T> resource = parentContainer.getResource(entry.getValue());
             T val = resource.forceResolve();
             assignProperty(cls, obj, entry.getKey(), val);
         }
-        for (HashMap.Entry<String, Object> entry : valueDependencies.get().entrySet()) {
+        for (HashMap.Entry<String, Object> entry : valueDependencies.entrySet()) {
             assignProperty(cls, obj, entry.getKey(), entry.getValue());
         }
         return (T)obj;

@@ -8,16 +8,11 @@ import java.util.function.Supplier;
  */
 public class Container 
 {
-    public static Container get() {
-        return threadContainer.get();
-    }
+    private static final Container singleton = new Container();
 
-    private static ThreadLocal<Container> threadContainer = new ThreadLocal<Container>() {
-        @Override
-        protected Container initialValue() {
-            return new Container();
-        }
-     };
+    public static Container get() {
+        return singleton;
+    }
 
     private ConcurrentHashMap<String, Resource<?>> resources = new ConcurrentHashMap<>();
 
