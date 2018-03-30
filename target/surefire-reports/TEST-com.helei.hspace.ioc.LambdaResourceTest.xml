@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="2" failures="0" name="com.helei.hspace.ioc.LambdaResourceTest" time="0.061" errors="0" skipped="0">
+<testsuite tests="2" failures="0" name="com.helei.hspace.ioc.LambdaResourceTest" time="0.071" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib"/>
@@ -24,7 +24,6 @@
     <property name="java.io.tmpdir" value="/var/folders/vh/nhpy8x9n5mn4rb5lbsq5qr4m0000gn/T/"/>
     <property name="line.separator" value="
 "/>
-    <property name="socksProxyPort" value="1086"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Mac OS X"/>
     <property name="classworlds.conf" value="/usr/local/Cellar/maven/3.5.0/libexec/bin/m2.conf"/>
@@ -36,7 +35,6 @@
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="os.version" value="10.13.1"/>
     <property name="library.jansi.path" value="/usr/local/Cellar/maven/3.5.0/libexec/lib/jansi-native/osx64"/>
-    <property name="http.nonProxyHosts" value="127.0.0.1|localhost|*.localhost"/>
     <property name="user.home" value="/Users/helei"/>
     <property name="user.timezone" value="Asia/Shanghai"/>
     <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob"/>
@@ -44,7 +42,6 @@
     <property name="file.encoding" value="UTF-8"/>
     <property name="user.name" value="helei"/>
     <property name="java.class.path" value="/usr/local/Cellar/maven/3.5.0/libexec/boot/plexus-classworlds-2.5.2.jar"/>
-    <property name="socksProxyHost" value="127.0.0.1"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre"/>
@@ -63,10 +60,8 @@
     <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
-    <property name="socksNonProxyHosts" value="127.0.0.1|localhost|*.localhost"/>
-    <property name="ftp.nonProxyHosts" value="127.0.0.1|localhost|*.localhost"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="com.helei.hspace.ioc.LambdaResourceTest" name="testResolveGood" time="0.061"/>
+  <testcase classname="com.helei.hspace.ioc.LambdaResourceTest" name="testResolveGood" time="0.071"/>
   <testcase classname="com.helei.hspace.ioc.LambdaResourceTest" name="testResolveBad" time="0"/>
 </testsuite>
