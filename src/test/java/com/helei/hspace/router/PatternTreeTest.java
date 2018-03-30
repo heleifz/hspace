@@ -52,10 +52,14 @@ public class PatternTreeTest {
     public void testCapture() throws Exception {
         PatternTree tree = new PatternTree();
         tree.addPattern("/*/world/:name", "t1");
-        tree.addPattern("/:pig/*/88", "t2");
+        tree.addPattern("/:pig/*/88/:hey", "t2");
         MatchResult r = tree.match("/hello/world/hehe");
         assertEquals("t1", r.getTag());
         assertEquals("hehe", r.getCaptures().get("name"));
+        r = tree.match("/asdfsdf/xxxx/88/44");
+        assertEquals("t2", r.getTag());
+        assertEquals("asdfsdf", r.getCaptures().get("pig"));
+        assertEquals("44", r.getCaptures().get("hey"));
     }
 
 }

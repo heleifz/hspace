@@ -51,11 +51,8 @@ public class PatternTree
         int score = patternScore(tokens);
         patternPriority.put(tag, score);
         Node currentNode = root;
-        int idx = 0;
         for (int i = 0; i < tokens.size(); ++i) {
             Token tok = tokens.get(i);
-            Token.Type type = tok.getType();
-            
             List<Node> nexts = currentNode.getChildren();
             boolean isCompatible = false;
             Node compatibleNode = null;
@@ -303,8 +300,8 @@ public class PatternTree
             Token tok = state.tokens.get(state.position);
             int pos = state.position;
             if (tok.getType() == Token.Type.TEXT) {
+                state.captures.put(captureName, tok.getText());
                 SearchState newState = state.move(pos + 1);
-                newState.captures.put(captureName, tok.getText());
                 return Collections.singletonList(newState);
             } else {
                 return Collections.emptyList(); 
