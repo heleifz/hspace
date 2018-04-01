@@ -2,5 +2,8 @@
 /Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/ioc/LambdaResourceTest.java
 /Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/ioc/ContainerTest.java
 /Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/ioc/TestA.java
+/Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/reflect/ResourceFinderTest.java
+/Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/reflect/ResourceA.java
 /Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/router/TokenTest.java
 /Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/router/PatternTreeTest.java
+/Users/helei/project/ss/hspace/src/test/java/com/helei/hspace/reflect/ResourceB.java

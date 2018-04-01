@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MatchResult {
+    
     private String tag = "";
     // capture_name -> [begin, end)
     private HashMap<String, String> captures = new HashMap<>();
