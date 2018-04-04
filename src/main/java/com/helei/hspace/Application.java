@@ -6,6 +6,7 @@ import com.helei.hspace.server.RequestDispatcher;
 
 import com.helei.hspace.Dependency;
 
+// TODO extract core and application
 public class Application {
 
     public static void main(String[] args) throws Exception {

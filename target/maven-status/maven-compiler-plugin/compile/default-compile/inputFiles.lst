@@ -10,7 +10,7 @@
 /Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/util/StringUtil.java
 /Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/article/ArticleService.java
 /Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/router/Router.java
-/Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/reflect/ResourceFinder.java
+/Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/reflect/PackageScanner.java
 /Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/router/PatternTree.java
 /Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/Dependency.java
 /Users/helei/project/ss/hspace/src/main/java/com/helei/hspace/Application.java

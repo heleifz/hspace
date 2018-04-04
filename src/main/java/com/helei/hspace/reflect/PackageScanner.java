@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.lang.reflect.*;
 import java.net.URI;
 import java.net.URL;
@@ -21,14 +21,14 @@ import java.lang.annotation.*;
 /**
  * Scanning package and get annotated elements
  */
-class ResourceFinder {
+class PackageScanner {
 
     /**
      * get classes annotated with @Resource in current class loader
      */
-    public static List<Class<?>> getResource(String packageName) {
+    public static Stream<Class<?>> scan(String packageName, Class<? extends Annotation> anno) {
         String dirName = packageName.replace(".", "/");
-        ArrayList<Class<?>> result = new ArrayList<>();
+        Stream<Class<?>> result = Stream.empty();
         try {
             Enumeration<URL> packageUrl = Thread.currentThread().getContextClassLoader().getResources(dirName);
             while (packageUrl.hasMoreElements()) {
@@ -42,7 +42,7 @@ class ResourceFinder {
                     path = Paths.get(uri);
                 }
                 String pathString = path.toString();
-                List<Class<?>> current = Files.walk(path).map(p -> {
+                result = Stream.concat(result, Files.walk(path).map(p -> {
                     String currentString = p.toString();
                     int pos = currentString.indexOf(pathString) + pathString.length();
                     String normPath = (dirName + currentString.substring(pos));
@@ -60,9 +60,8 @@ class ResourceFinder {
                         if (cls == null) {
                             return false;
                         }
-                        return getAnnotation(cls, Resource.class) != null;
-                    }).collect(Collectors.toList());
-                result.addAll(current);
+                        return getAnnotation(cls, anno) != null;
+                    }));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -79,6 +78,9 @@ class ResourceFinder {
             return null;
         }
     }
+
+    // todo scan methods
+    // todo scan fields
 
     public static String getResourceId(Class<?> cls) {
         Annotation anno = getAnnotation(cls, Resource.class);
@@ -137,7 +139,7 @@ class ResourceFinder {
     }
 
     public static void main(String[] args) {
-        System.out.println(ResourceFinder.getResource("com.helei"));
+        // System.out.println(ResourceFinder.getResource("com.helei"));
     }
 
 }

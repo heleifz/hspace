@@ -1,8 +1,8 @@
-com/helei/hspace/reflect/ResourceFinderTest.class
 com/helei/hspace/reflect/ResourceB.class
 com/helei/hspace/reflect/ResourceA.class
 com/helei/hspace/ioc/TestB.class
 com/helei/hspace/ioc/ContainerTest.class
+com/helei/hspace/reflect/PackageScannerTest.class
 com/helei/hspace/router/PatternTreeTest.class
 com/helei/hspace/ioc/LambdaResourceTest.class
 com/helei/hspace/ioc/TestA.class
