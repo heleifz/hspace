@@ -1,6 +1,9 @@
 package com.helei.hspace.router;
 
 import java.util.List;
+
+import com.helei.hspace.router.Token.Type;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ public class PatternTree
 
     public MatchResult match(String query) {
         List<Token> tokens = Token.tokenize(query);
+        // System.out.println("token:" + tokens);
         SearchState initial = SearchState.create(tokens);
         Node root = getRoot();
         List<MatchResult> allMatches = root.match(initial);
@@ -222,6 +226,9 @@ public class PatternTree
         }
         @Override
         public List<SearchState> matchThis(SearchState state) {
+            if (state.position == 0 && state.tokens.get(0).getType() == Type.METHOD) {
+                state = state.move(1);
+            }
             if (state.tokens.get(state.position).getText().equals(text)) {
                 return Collections.singletonList(state.move(state.position + 1));
             } else {

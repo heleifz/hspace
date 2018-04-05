@@ -1,12 +1,15 @@
 package com.helei.hspace.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.helei.hspace.ioc.Container;
 import com.helei.hspace.server.RequestProcessor;
 
 import org.eclipse.jetty.server.Connector;
@@ -26,7 +29,7 @@ public class JettyServer implements com.helei.hspace.server.WebServer
      * @param port http port
      * @param numThread number of threads
      */
-    public JettyServer(int port, int numThread) {
+    public JettyServer(int port, int numThread, Container container) {
         int maxThreads = numThread + 10;
         int minThreads = numThread;
         int idleTimeout = 120;
@@ -40,17 +43,27 @@ public class JettyServer implements com.helei.hspace.server.WebServer
         server.setHandler(new AbstractHandler() {
         
             public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-                    throws IOException, ServletException {
+                    throws IOException  {
                 response.setContentType("text/html;charset=utf-8");
                 response.setStatus(HttpServletResponse.SC_OK);
                 String content = null;
-                for (RequestProcessor p : processors) {
-                    content = p.handle(request, response);
+                try {
+                    for (RequestProcessor p : processors) {
+                        content = p.handle(request, response, container);
+                    }
+                    if (!content.isEmpty()) {
+                        response.getWriter().write(content);
+                    }
+                } catch (Exception e) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    PrintStream ps = new PrintStream(baos, true, "utf-8");
+                    e.printStackTrace(ps);
+                    String trace = new String(baos.toByteArray(), StandardCharsets.UTF_8);
+                    ps.close();
+                    response.getWriter().write("ERROR:" + trace);
                 }
-                response.getWriter().write(content);
                 baseRequest.setHandled(true);
             }
-
         });
     }
    

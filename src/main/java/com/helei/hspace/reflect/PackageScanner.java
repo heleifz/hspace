@@ -5,39 +5,45 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.stream.Stream.Builder;
 import java.lang.reflect.*;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import com.helei.hspace.reflect.Resource;
-import com.helei.hspace.reflect.Autowire;
-import com.helei.hspace.reflect.Route;
 import java.lang.annotation.*;
 
 /**
  * Scanning package and get annotated elements
  */
-class PackageScanner {
+public class PackageScanner {
 
     /**
      * get classes annotated with @Resource in current class loader
      */
     public static Stream<Class<?>> scan(String packageName, Class<? extends Annotation> anno) {
+        System.out.println("Scanning " + packageName);
         String dirName = packageName.replace(".", "/");
         Stream<Class<?>> result = Stream.empty();
         try {
             Enumeration<URL> packageUrl = Thread.currentThread().getContextClassLoader().getResources(dirName);
             while (packageUrl.hasMoreElements()) {
                 URI uri = packageUrl.nextElement().toURI();
+                System.out.println("URI: " + uri);
                 String scheme = uri.getScheme();
-                final Path path;
+                Path path;
                 if (scheme.equals("jar")) {
-                    FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
-                    path = fs.getPath(dirName);
+                    try {
+                        FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
+                        path = fs.getPath(dirName);
+                    } catch (FileSystemAlreadyExistsException e) {
+                        FileSystem fs = FileSystems.getFileSystem(uri);
+                        path = fs.getPath(dirName);
+                    }
                 } else {
                     path = Paths.get(uri);
                 }
@@ -70,6 +76,12 @@ class PackageScanner {
         return result;
     }
 
+    /**
+     * get annotation from an element
+     * @param element element
+     * @param annotation expected annotation
+     * @return annotation object (null if annotation not exists)
+     */
     public static Annotation getAnnotation(AnnotatedElement element, 
         Class<? extends Annotation> annotation) {
         try {
@@ -79,64 +91,70 @@ class PackageScanner {
         }
     }
 
-    // todo scan methods
-    // todo scan fields
-
-    public static String getResourceId(Class<?> cls) {
-        Annotation anno = getAnnotation(cls, Resource.class);
-        if (anno != null) {
-            String provideId = ((Resource)anno).id();
-            if (provideId.isEmpty()) {
-                return cls.getCanonicalName();
-            } else {
-                return provideId;
+    public static Stream<Method> getAnnotatedMethods(Class<?> cls, 
+        Class<? extends Annotation> annotation) {
+        Builder<Method> builder = Stream.builder();
+        for (Method m : cls.getMethods()) {
+            if (getAnnotation(m, annotation) != null) {
+                builder.accept(m);
             }
         }
-        return "";
+        return builder.build();
     }
 
-    public static List<Field> getAutowired(Class<?> cls) {
-        Annotation classAnno = getAnnotation(cls, Resource.class);
-        if (classAnno == null) {
-            return Collections.emptyList();
-        }
-        Field[] fields = cls.getFields();
-        ArrayList<Field> autowiredFields = new ArrayList<>();
-        boolean wireAll = ((Resource)classAnno).autowireProperty();
-        for (Field field : fields) {
-            Annotation anno = getAnnotation(field, Autowire.class);
-            boolean ignore = false;
-            boolean hasAnno = false;
-            if (anno != null) {
-                Autowire wiring = (Autowire)anno; 
-                ignore = wiring.ignore();
-                hasAnno = true;
-            } 
-            if (!ignore && (wireAll || hasAnno)) {
-                autowiredFields.add(field); 
+    public static Stream<Field> getAnnotatedFields(Class<?> cls, 
+        Class<? extends Annotation> annotation) {
+        Builder<Field> builder = Stream.builder();
+        for (Field f : cls.getFields()) {
+            if (getAnnotation(f, annotation) != null) {
+                builder.accept(f);
             }
         }
-        return autowiredFields;
+        return builder.build();
     }
 
-    public static List<Method> getRoute(Class<?> cls) {
-        Annotation classAnno = getAnnotation(cls, Resource.class);
-        if (classAnno == null) {
-            return Collections.emptyList();
-        }
-        Method[] methods = cls.getMethods();
-        ArrayList<Method> routes = new ArrayList<>();
-        for (Method method : methods) {
-            Annotation anno = getAnnotation(method, Route.class);
-            if (anno != null) {
-                Route route = (Route)anno; 
-                if (!route.value().isEmpty()) {
-                    routes.add(method);
-                }
-            } 
-        }
-        return routes;
-    }
+    // public static List<Field> getAutowired(Class<?> cls) {
+    //     Annotation classAnno = getAnnotation(cls, Resource.class);
+    //     if (classAnno == null) {
+    //         return Collections.emptyList();
+    //     }
+    //     Field[] fields = cls.getFields();
+    //     ArrayList<Field> autowiredFields = new ArrayList<>();
+    //     boolean wireAll = ((Resource)classAnno).autowireProperty();
+    //     for (Field field : fields) {
+    //         Annotation anno = getAnnotation(field, Autowire.class);
+    //         boolean ignore = false;
+    //         boolean hasAnno = false;
+    //         if (anno != null) {
+    //             Autowire wiring = (Autowire)anno; 
+    //             ignore = wiring.ignore();
+    //             hasAnno = true;
+    //         } 
+    //         if (!ignore && (wireAll || hasAnno)) {
+    //             autowiredFields.add(field); 
+    //         }
+    //     }
+    //     return autowiredFields;
+    // }
+
+    // public static List<Method> getRoute(Class<?> cls) {
+    //     Annotation classAnno = getAnnotation(cls, Resource.class);
+    //     if (classAnno == null) {
+    //         return Collections.emptyList();
+    //     }
+    //     Method[] methods = cls.getMethods();
+    //     ArrayList<Method> routes = new ArrayList<>();
+    //     for (Method method : methods) {
+    //         Annotation anno = getAnnotation(method, Route.class);
+    //         if (anno != null) {
+    //             Route route = (Route)anno; 
+    //             if (!route.value().isEmpty()) {
+    //                 routes.add(method);
+    //             }
+    //         } 
+    //     }
+    //     return routes;
+    // }
 
     public static void main(String[] args) {
         // System.out.println(ResourceFinder.getResource("com.helei"));

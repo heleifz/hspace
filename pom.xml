@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                     <manifest>
-                        <mainClass>com.helei.hspace.Application</mainClass>
+                        <mainClass>com.helei.hwiki.HWiki</mainClass>
                     </manifest>
                     </archive>
                     <descriptorRefs>

@@ -5,8 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.lang.reflect.*;
 import com.helei.hspace.util.*;
 
-import org.eclipse.jetty.util.ConcurrentArrayQueue;
-
 public class ThreadResource<T> implements Resource<T>
 {
     private Container parentContainer;

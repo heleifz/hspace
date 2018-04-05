@@ -4,10 +4,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.*;
 
-import java.util.*;
-
-import com.helei.hspace.router.Token.Type;
-
 public class PatternTreeTest {
 
     @BeforeClass
