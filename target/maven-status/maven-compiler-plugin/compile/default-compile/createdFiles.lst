@@ -1,11 +1,9 @@
 com/helei/hspace/util/StringUtil.class
 com/helei/hspace/reflect/Autowire.class
 com/helei/hspace/router/PatternTree$MethodNode.class
-com/helei/hspace/server/HttpProtocol.class
 com/helei/hspace/util/Pair.class
 com/helei/hspace/reflect/Route.class
 com/helei/hwiki/HWiki.class
-com/helei/hspace/server/HttpProtocol$Method.class
 com/helei/hspace/server/WebServer.class
 com/helei/hspace/ioc/LambdaResource.class
 com/helei/hspace/router/PatternTree.class
@@ -19,6 +17,7 @@ com/helei/hspace/reflect/Resource.class
 com/helei/hspace/router/PatternTree$RootNode.class
 com/helei/hspace/Application.class
 com/helei/hspace/router/PatternTree$CaptureNode.class
+com/helei/hspace/server/ThreadedServer$1.class
 com/helei/hspace/router/Router.class
 com/helei/hspace/ioc/ThreadResource.class
 com/helei/hspace/router/PatternTree$TextNode.class
